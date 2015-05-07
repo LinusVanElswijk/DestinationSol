@@ -8,7 +8,9 @@ import com.miloshpetrov.sol2.SolApplication;
 import com.miloshpetrov.sol2.SolFileReader;
 import com.miloshpetrov.sol2.game.DebugOptions;
 import com.miloshpetrov.sol2.soundtest.SoundTestListener;
+import dagger.Component;
 
+import javax.inject.Singleton;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,6 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SolDesktop {
+
+    @Singleton
+    @Component(modules = { SolApplicationModule.class })
+    public interface Application {
+        SolApplication sol();
+    }
+
     public static void main(String[] argv) {
         if (false) {
             new LwjglApplication(new SoundTestListener(), "sound test", 800, 600, false);
@@ -53,7 +62,8 @@ public class SolDesktop {
             c.addIcon(DebugOptions.DEV_ROOT_PATH + "res/icon.png", Files.FileType.Absolute);
         }
 
-        new LwjglApplication(new SolApplication(), c);
+        Application application = DaggerSolDesktop_Application.builder().build();
+        new LwjglApplication(application.sol(), c);
     }
 
     private static class MyReader implements SolFileReader {

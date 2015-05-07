@@ -11,6 +11,7 @@ import com.miloshpetrov.sol2.game.*;
 import com.miloshpetrov.sol2.menu.MenuScreens;
 import com.miloshpetrov.sol2.ui.*;
 
+import javax.inject.Inject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 public class SolApplication implements ApplicationListener {
@@ -31,8 +32,8 @@ public class SolApplication implements ApplicationListener {
   private float myAccum = 0;
   private SolGame myGame;
 
-  public SolApplication() {
-
+  @Inject public SolApplication(TextureManager textureManager) {
+      myTextureManager = textureManager;
   }
 
   @Override
@@ -41,7 +42,7 @@ public class SolApplication implements ApplicationListener {
     if (myReallyMobile) DebugOptions.read(null);
     myOptions = new GameOptions(isMobile(), null);
 
-    myTextureManager = new TextureManager();
+    //myTextureManager = new TextureManager();
     myCommonDrawer = new CommonDrawer();
     myUiDrawer = new UiDrawer(myTextureManager, myCommonDrawer);
     myInputMan = new SolInputManager(myTextureManager, myUiDrawer.r);
