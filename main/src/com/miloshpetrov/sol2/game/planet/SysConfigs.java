@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.*;
 import com.miloshpetrov.sol2.common.SolMath;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.ShipConfig;
 import com.miloshpetrov.sol2.game.chunk.SpaceEnvConfig;
 import com.miloshpetrov.sol2.game.item.ItemMan;
@@ -34,7 +34,7 @@ public class SysConfigs {
     ItemMan itemMan)
   {
     JsonReader r = new JsonReader();
-    FileHandle configFile = FileManager.getInstance().getConfigDirectory().child(configName);
+    FileHandle configFile = FileManagerImplementation.getInstance().getConfigDirectory().child(configName);
     JsonValue parsed = r.parse(configFile);
     for (JsonValue sh : parsed) {
       ArrayList<ShipConfig> tempEnemies = ShipConfig.loadList(sh.get("temporaryEnemies"), hullConfigs, itemMan);

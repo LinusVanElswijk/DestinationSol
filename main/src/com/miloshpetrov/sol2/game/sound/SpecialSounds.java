@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.Const;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.*;
 
 public class SpecialSounds {
@@ -32,7 +32,7 @@ public class SpecialSounds {
 
   public SpecialSounds(SoundManager soundManager) {
     JsonReader r = new JsonReader();
-    FileHandle configFile = FileManager.getInstance().getConfigDirectory().child("specialSounds.json");
+    FileHandle configFile = FileManagerImplementation.getInstance().getConfigDirectory().child("specialSounds.json");
     JsonValue node = r.parse(configFile);
     metalColl = soundManager.getSound(node.getString("metalCollision"), configFile);
     metalBulletHit = soundManager.getPitchedSound(node.getString("metalBulletHit"), configFile, 1.1f);

@@ -10,21 +10,36 @@ import com.miloshpetrov.sol2.common.SolMath;
 import com.miloshpetrov.sol2.game.*;
 import com.miloshpetrov.sol2.menu.MenuScreens;
 import com.miloshpetrov.sol2.ui.*;
+import dagger.Component;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 public class SolApplication implements ApplicationListener {
 
-  private SolInputManager myInputMan;
-  private UiDrawer myUiDrawer;
+    @Singleton
+    @Component(modules = SolApplicationModule.class )
+    public interface ApplicationComponent {
+        void inject(SolApplication application);
+    }
+
+    @Inject TextureManager textureManager;
+    @Inject SolInputManager inputManager;
+    @Inject CommonDrawer commonDrawer;
+    @Inject FPSLogger myFpsLogger;
+    //@Inject UiDrawer myUiDrawer; //TODO: For some mysterious reason, this crashes the application on the first update
+
+    private UiDrawer myUiDrawer;
+
+
+    private ApplicationComponent component;
+
   private MenuScreens myMenuScreens;
-  private TextureManager myTextureManager;
   private SolLayouts myLayouts;
   private boolean myReallyMobile;
   private GameOptions myOptions;
-  private CommonDrawer myCommonDrawer;
-  private FPSLogger  myFpsLogger;
 
   private String myFatalErrorMsg;
   private String myFatalErrorTrace;
@@ -32,25 +47,22 @@ public class SolApplication implements ApplicationListener {
   private float myAccum = 0;
   private SolGame myGame;
 
-  @Inject public SolApplication(TextureManager textureManager) {
-      myTextureManager = textureManager;
-  }
+  public SolApplication() { }
 
   @Override
   public void create() {
-    myReallyMobile = Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS;
-    if (myReallyMobile) DebugOptions.read(null);
-    myOptions = new GameOptions(isMobile(), null);
+      myReallyMobile = Gdx.app.getType() == Application.ApplicationType.Android || Gdx.app.getType() == Application.ApplicationType.iOS;
+      if (myReallyMobile) DebugOptions.read(null);
+      myOptions = new GameOptions(isMobile(), null);
 
-    //myTextureManager = new TextureManager();
-    myCommonDrawer = new CommonDrawer();
-    myUiDrawer = new UiDrawer(myTextureManager, myCommonDrawer);
-    myInputMan = new SolInputManager(myTextureManager, myUiDrawer.r);
+    component = DaggerSolApplication_ApplicationComponent.builder().build();
+    component.inject(this);
+
+    myUiDrawer = new UiDrawer(textureManager, commonDrawer);
     myLayouts = new SolLayouts(myUiDrawer.r);
-    myMenuScreens = new MenuScreens(myLayouts, myTextureManager, isMobile(), myUiDrawer.r);
+    myMenuScreens = new MenuScreens(myLayouts, textureManager, isMobile(), myUiDrawer.r);
 
-    myInputMan.setScreen(this, myMenuScreens.main);
-    myFpsLogger = new FPSLogger();
+    inputManager.setScreen(this, myMenuScreens.main);
   }
 
   @Override
@@ -98,7 +110,7 @@ public class SolApplication implements ApplicationListener {
       DebugCollector.debug("Fps", Gdx.graphics.getFramesPerSecond());
       myFpsLogger.log();
     }
-    myInputMan.update(this);
+    inputManager.update(this);
     if (myGame != null) {
       myGame.update();
     }
@@ -108,12 +120,12 @@ public class SolApplication implements ApplicationListener {
 
   private void draw() {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-    myCommonDrawer.begin();
+    commonDrawer.begin();
     if (myGame != null) {
       myGame.draw();
     }
     myUiDrawer.updateMtx();
-    myInputMan.draw(myUiDrawer, this);
+    inputManager.draw(myUiDrawer, this);
     if (myGame != null) {
       myGame.drawDebugUi(myUiDrawer);
     }
@@ -126,22 +138,22 @@ public class SolApplication implements ApplicationListener {
     if (myGame == null) {
       myUiDrawer.drawString("version: " + Const.VERSION, 0.01f, .98f, FontSize.DEBUG, false, SolColor.W);
     }
-    myCommonDrawer.end();
+    commonDrawer.end();
   }
 
   public void loadNewGame(boolean tut, boolean usePrevShip) {
     if (myGame != null) throw new AssertionError("Starting a new game with unfinished current one");
-    myInputMan.setScreen(this, myMenuScreens.loading);
+    inputManager.setScreen(this, myMenuScreens.loading);
     myMenuScreens.loading.setMode(tut, usePrevShip);
   }
 
   public void startNewGame(boolean tut, boolean usePrevShip) {
-    myGame = new SolGame(this, usePrevShip, myTextureManager, tut, myCommonDrawer);
-    myInputMan.setScreen(this, myGame.getScreens().mainScreen);
+    myGame = new SolGame(this, usePrevShip, textureManager, tut, commonDrawer);
+    inputManager.setScreen(this, myGame.getScreens().mainScreen);
   }
 
   public SolInputManager getInputMan() {
-    return myInputMan;
+    return inputManager;
   }
 
   public MenuScreens getMenuScreens() {
@@ -149,10 +161,10 @@ public class SolApplication implements ApplicationListener {
   }
 
   public void dispose() {
-    myCommonDrawer.dispose();
+    commonDrawer.dispose();
     if (myGame != null) myGame.onGameEnd();
-    myTextureManager.dispose();
-    myInputMan.dispose();
+    textureManager.dispose();
+    inputManager.dispose();
   }
 
   public SolGame getGame() {
@@ -166,11 +178,11 @@ public class SolApplication implements ApplicationListener {
   public void finishGame() {
     myGame.onGameEnd();
     myGame = null;
-    myInputMan.setScreen(this, myMenuScreens.main);
+    inputManager.setScreen(this, myMenuScreens.main);
   }
 
   public TextureManager getTexMan() {
-    return myTextureManager;
+    return textureManager;
   }
 
   public boolean isMobile() {

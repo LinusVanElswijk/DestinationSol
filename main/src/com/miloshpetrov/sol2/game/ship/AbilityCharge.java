@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.TextureManager;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.game.item.*;
 
@@ -77,7 +77,7 @@ public class AbilityCharge implements SolItem {
 
     public static void load(ItemMan itemMan, TextureManager textureManager, SolItemTypes types) {
       JsonReader r = new JsonReader();
-      FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("abilityCharges.json");
+      FileHandle configFile = FileManagerImplementation.getInstance().getItemsDirectory().child("abilityCharges.json");
       JsonValue parsed = r.parse(configFile);
       for (JsonValue ammoNode : parsed) {
         String iconName = ammoNode.getString("iconName");

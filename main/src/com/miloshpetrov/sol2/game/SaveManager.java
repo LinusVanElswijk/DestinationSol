@@ -1,6 +1,6 @@
 package com.miloshpetrov.sol2.game;
 
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.item.ItemMan;
 import com.miloshpetrov.sol2.game.item.SolItem;
 import com.miloshpetrov.sol2.game.ship.HullConfig;
@@ -23,7 +23,7 @@ public class SaveManager {
   }
 
   public static boolean hasPrevShip() {
-    return FileManager.getInstance().getDynamicFile(FILE_NAME).exists();
+    return FileManagerImplementation.getInstance().getDynamicFile(FILE_NAME).exists();
   }
 
   public static ShipConfig readShip(HullConfigs hullConfigs, ItemMan itemMan) {

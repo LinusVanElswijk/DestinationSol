@@ -1,7 +1,7 @@
 package com.miloshpetrov.sol2;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 
 import java.util.*;
 
@@ -27,8 +27,8 @@ public class IniReader {
   }
 
   private List<String> fileToLines(String fileName, boolean readOnly) {
-    FileManager.FileLocation accessType = readOnly ? FileManager.FileLocation.STATIC_FILES : FileManager.FileLocation.DYNAMIC_FILES;
-    FileHandle fh = FileManager.getInstance().getFile(fileName, accessType);
+    FileManagerImplementation.FileLocation accessType = readOnly ? FileManagerImplementation.FileLocation.STATIC_FILES : FileManagerImplementation.FileLocation.DYNAMIC_FILES;
+    FileHandle fh = FileManagerImplementation.getInstance().getFile(fileName, accessType);
 
     ArrayList<String> res = new ArrayList<String>();
     if (!fh.exists()) return res;
@@ -67,7 +67,7 @@ public class IniReader {
       sb.append(second ? '\n' : '=');
       second = !second;
     }
-    FileHandle file = FileManager.getInstance().getDynamicFile(fileName);
+    FileHandle file = FileManagerImplementation.getInstance().getDynamicFile(fileName);
     file.writeString(sb.toString(), false);
   }
 

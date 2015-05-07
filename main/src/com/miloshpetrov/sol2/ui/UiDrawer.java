@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.*;
 import com.miloshpetrov.sol2.*;
 
+import javax.inject.Inject;
+
 public class UiDrawer {
 
   private static final float FONT_SIZE = .02f;
@@ -17,7 +19,7 @@ public class UiDrawer {
   public final Rectangle filler;
   private Boolean myTextMode;
 
-  public UiDrawer(TextureManager textureManager, CommonDrawer commonDrawer) {
+  @Inject public UiDrawer(TextureManager textureManager, CommonDrawer commonDrawer) {
     myDrawer = commonDrawer;
     r = myDrawer.r;
     whiteTex = textureManager.getTex("ui/whiteTex", null);

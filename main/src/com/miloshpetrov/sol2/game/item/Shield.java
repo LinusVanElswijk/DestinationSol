@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.TextureManager;
 import com.miloshpetrov.sol2.common.SolMath;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.*;
 import com.miloshpetrov.sol2.game.ship.SolShip;
 import com.miloshpetrov.sol2.game.sound.SolSound;
@@ -144,7 +144,7 @@ public class Shield implements SolItem {
 
     public static void loadConfigs(ItemMan itemMan, SoundManager soundManager, TextureManager textureManager, SolItemTypes types) {
       JsonReader r = new JsonReader();
-      FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("shields.json");
+      FileHandle configFile = FileManagerImplementation.getInstance().getItemsDirectory().child("shields.json");
       JsonValue parsed = r.parse(configFile);
       for (JsonValue sh : parsed) {
         int maxLife = sh.getInt("maxLife");

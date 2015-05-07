@@ -7,9 +7,8 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.*;
 import com.miloshpetrov.sol2.common.SolMath;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.AbilityCommonConfigs;
-import com.miloshpetrov.sol2.game.asteroid.FarAsteroid;
 import com.miloshpetrov.sol2.game.item.EngineItem;
 import com.miloshpetrov.sol2.game.item.ItemMan;
 import com.miloshpetrov.sol2.game.sound.SoundManager;
@@ -25,7 +24,7 @@ public class HullConfigs {
     myConfigs = new HashMap<String, HullConfig>();
 
     JsonReader r = new JsonReader();
-    FileHandle configFile = FileManager.getInstance().getConfigDirectory().child("hulls.json");
+    FileHandle configFile = FileManagerImplementation.getInstance().getConfigDirectory().child("hulls.json");
     JsonValue parsed = r.parse(configFile);
     for (JsonValue hullNode : parsed) {
       String texName = hullNode.getString("texName");

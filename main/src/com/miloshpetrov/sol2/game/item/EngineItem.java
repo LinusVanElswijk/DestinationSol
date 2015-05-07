@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.TextureManager;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.GameCols;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.game.particle.EffectConfig;
@@ -129,7 +129,7 @@ public class EngineItem implements SolItem {
     public static Configs load(SoundManager soundManager, TextureManager textureManager, EffectTypes effectTypes, GameCols cols) {
       HashMap<String, Config> configs = new HashMap<String, Config>();
       JsonReader r = new JsonReader();
-      FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("engines.json");
+      FileHandle configFile = FileManagerImplementation.getInstance().getItemsDirectory().child("engines.json");
       JsonValue parsed = r.parse(configFile);
       for (JsonValue sh : parsed) {
         Config config = Config.load(soundManager, configFile, sh, effectTypes, textureManager, cols);

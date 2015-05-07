@@ -20,12 +20,6 @@ import java.util.List;
 
 public class SolDesktop {
 
-    @Singleton
-    @Component(modules = { SolApplicationModule.class })
-    public interface Application {
-        SolApplication sol();
-    }
-
     public static void main(String[] argv) {
         if (false) {
             new LwjglApplication(new SoundTestListener(), "sound test", 800, 600, false);
@@ -62,8 +56,7 @@ public class SolDesktop {
             c.addIcon(DebugOptions.DEV_ROOT_PATH + "res/icon.png", Files.FileType.Absolute);
         }
 
-        Application application = DaggerSolDesktop_Application.builder().build();
-        new LwjglApplication(application.sol(), c);
+        new LwjglApplication(new SolApplication(), c);
     }
 
     private static class MyReader implements SolFileReader {

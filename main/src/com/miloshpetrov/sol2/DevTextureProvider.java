@@ -4,7 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.FileManagerImplementation;
 import com.miloshpetrov.sol2.game.DebugOptions;
 
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ public class DevTextureProvider implements TextureProvider {
   private final Texture myMissingTex;
 
   DevTextureProvider() {
-    FileHandle missingFile = FileManager.getInstance().getStaticFile("imgSrcs/smallGameObjs/missing.png");
+    FileHandle missingFile = FileManagerImplementation.getInstance().getStaticFile("imgSrcs/smallGameObjs/missing.png");
     myMissingTex = new Texture(missingFile);
   }
 
   @Override
   public TextureAtlas.AtlasRegion getTex(String fullName, FileHandle configFile) {
-    FileHandle fh = FileManager.getInstance().getStaticFile(PREF + fullName + SUFF);
+    FileHandle fh = FileManagerImplementation.getInstance().getStaticFile(PREF + fullName + SUFF);
     return newTex(fh, fullName, -1, configFile);
   }
 
@@ -46,13 +46,13 @@ public class DevTextureProvider implements TextureProvider {
 
   @Override
   public Sprite createSprite(String name) {
-    Texture tex = new Texture(FileManager.getInstance().getStaticFile(PREF + name + SUFF));
+    Texture tex = new Texture(FileManagerImplementation.getInstance().getStaticFile(PREF + name + SUFF));
     return new Sprite(tex);
   }
 
   @Override
   public ArrayList<TextureAtlas.AtlasRegion> getTexs(String name, FileHandle configFile) {
-    FileHandle file = FileManager.getInstance().getStaticFile(PREF + name + SUFF);
+    FileHandle file = FileManagerImplementation.getInstance().getStaticFile(PREF + name + SUFF);
     FileHandle dir = file.parent();
     String baseName = file.nameWithoutExtension();
     ArrayList<TextureAtlas.AtlasRegion> res = new ArrayList<TextureAtlas.AtlasRegion>();

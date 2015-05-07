@@ -14,6 +14,7 @@ import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.GameOptions;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,11 @@ public class SolInputManager {
   private boolean myWarnPercGrows;
   private Boolean myScrolledUp;
 
-  public SolInputManager(TextureManager textureManager, float r) {
+  private final FileManager fileManager;
+
+  @Inject public SolInputManager(TextureManager textureManager, FileManager fileManager) {
+    this.fileManager = fileManager;
+
     myPtrs = new Ptr[POINTER_COUNT];
     for (int i = 0; i < POINTER_COUNT; i++) {
       myPtrs[i] = new Ptr();
@@ -59,7 +64,7 @@ public class SolInputManager {
     myToAdd = new ArrayList<SolUiScreen>();
     myWarnCol = new Color(SolColor.UI_WARN);
 
-    FileHandle hoverSoundFile = FileManager.getInstance().getSoundsDirectory().child("ui").child("uiHover.ogg");
+    FileHandle hoverSoundFile = fileManager.getSoundsDirectory().child("ui").child("uiHover.ogg");
     myHoverSound = Gdx.audio.newSound(hoverSoundFile);
   }
 

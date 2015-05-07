@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.miloshpetrov.sol2.common.SolMath;
 import com.miloshpetrov.sol2.files.FileManager;
 
+import javax.inject.Inject;
 import java.util.*;
 
 public class TextureManager {
+
   public static final String ICONS_DIR = "ui/icons/";
   public static final String HULL_ICONS_DIR = "ui/hullIcons/";
   private final Map<String, TextureAtlas.AtlasRegion> myTexs;
@@ -16,8 +18,8 @@ public class TextureManager {
   private final Map<String, ArrayList<TextureAtlas.AtlasRegion>> myPacks;
   private final TextureProvider myTexProvider;
 
-  public TextureManager() {
-    FileHandle atlasFile = FileManager.getInstance().getImagesDirectory().child("sol.atlas");
+  @Inject public TextureManager(FileManager fileManager) {
+    FileHandle atlasFile = fileManager.getImagesDirectory().child("sol.atlas");
     myTexProvider = atlasFile.exists() ? new AtlasTextureProvider(atlasFile) : new DevTextureProvider();
     myPacks = new HashMap<String, ArrayList<TextureAtlas.AtlasRegion>>();
     myTexs = new HashMap<String, TextureAtlas.AtlasRegion>();

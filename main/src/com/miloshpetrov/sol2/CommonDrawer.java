@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.*;
 import com.miloshpetrov.sol2.common.SolMath;
 import com.miloshpetrov.sol2.files.FileManager;
 
+import javax.inject.Inject;
+
 public class CommonDrawer {
   public final float w;
   public final float h;
@@ -18,14 +20,14 @@ public class CommonDrawer {
   private final float myOrigFontHeight;
   private final TextureChecker myTextureChecker;
 
-  public CommonDrawer() {
+  @Inject public CommonDrawer(FileManager fileManager) {
     myTextureChecker = new TextureChecker();
     w = Gdx.graphics.getWidth();
     h = Gdx.graphics.getHeight();
     r = w / h;
     mySpriteBatch = new SpriteBatch();
 
-    final FileHandle fontFile = FileManager.getInstance().getFontsDirectory().child("main.fnt");
+    final FileHandle fontFile = fileManager.getFontsDirectory().child("main.fnt");
     myFont = new BitmapFont(fontFile, true);
     myFont.setUseIntegerPositions(false);
 
