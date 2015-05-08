@@ -4,9 +4,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.miloshpetrov.sol2.SolFiles;
 import com.miloshpetrov.sol2.TextureManager;
 import com.miloshpetrov.sol2.common.SolMath;
+import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.DmgType;
 import com.miloshpetrov.sol2.game.HardnessCalc;
 import com.miloshpetrov.sol2.game.item.*;
@@ -98,9 +98,9 @@ public class GunConfig {
     return sb.toString();
   }
 
-  public static void load(TextureManager textureManager, ItemMan itemMan, SoundManager soundManager, SolItemTypes types) {
+  public static void load(TextureManager textureManager, ItemManager itemManager, SoundManager soundManager, SolItemTypes types) {
     JsonReader r = new JsonReader();
-    FileHandle configFile = SolFiles.readOnly(ItemMan.ITEM_CONFIGS_DIR + "guns.json");
+    FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("guns.json");
     JsonValue parsed = r.parse(configFile);
     for (JsonValue sh : parsed) {
       float minAngleVar = sh.getFloat("minAngleVar", 0);
@@ -116,7 +116,7 @@ public class GunConfig {
       boolean lightOnShot = sh.getBoolean("lightOnShot", false);
       int price = sh.getInt("price");
       String clipName = sh.getString("clipName");
-      ClipConfig clipConf = clipName.isEmpty() ? null : ((ClipItem)itemMan.getExample(clipName)).getConfig();
+      ClipConfig clipConf = clipName.isEmpty() ? null : ((ClipItem) itemManager.getExample(clipName)).getConfig();
       String reloadSoundPath = sh.getString("reloadSound");
       SolSound reloadSound = soundManager.getSound(reloadSoundPath, configFile);
       String shootSoundPath = sh.getString("shootSound");
@@ -129,7 +129,7 @@ public class GunConfig {
       SolItemType itemType = fixed ? types.fixedGun : types.gun;
       GunConfig c = new GunConfig(minAngleVar, maxAngleVar, angleVarDamp, angleVarPerShot, timeBetweenShots, reloadTime,
         gunLength, displayName, lightOnShot, price, clipConf, shootSound, reloadSound, tex, icon, fixed, itemType, texLenPerc, code);
-      itemMan.registerItem(c.example);
+      itemManager.registerItem(c.example);
     }
   }
 }

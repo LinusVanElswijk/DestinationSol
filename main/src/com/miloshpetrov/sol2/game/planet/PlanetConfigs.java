@@ -5,9 +5,10 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.*;
 import com.miloshpetrov.sol2.common.SolMath;
-import com.miloshpetrov.sol2.game.GameCols;
-import com.miloshpetrov.sol2.game.item.ItemMan;
-import com.miloshpetrov.sol2.game.ship.HullConfigs;
+import com.miloshpetrov.sol2.files.FileManager;
+import com.miloshpetrov.sol2.files.HullConfigManager;
+import com.miloshpetrov.sol2.game.GameColors;
+import com.miloshpetrov.sol2.game.item.ItemManager;
 
 import java.util.*;
 
@@ -17,17 +18,17 @@ public class PlanetConfigs {
   private final List<PlanetConfig> myMedium;
   private final List<PlanetConfig> myHard;
 
-  public PlanetConfigs(TextureManager textureManager, HullConfigs hullConfigs, GameCols cols, ItemMan itemMan) {
+  public PlanetConfigs(TextureManager textureManager, HullConfigManager hullConfigs, GameColors cols, ItemManager itemManager) {
     myAllConfigs = new HashMap<String, PlanetConfig>();
     myEasy = new ArrayList<PlanetConfig>();
     myMedium = new ArrayList<PlanetConfig>();
     myHard = new ArrayList<PlanetConfig>();
 
     JsonReader r = new JsonReader();
-    FileHandle configFile = SolFiles.readOnly(Const.CONFIGS_DIR + "planets.json");
+    FileHandle configFile = FileManager.getInstance().getConfigDirectory().child("planets.json");
     JsonValue parsed = r.parse(configFile);
     for (JsonValue sh : parsed) {
-      PlanetConfig c = PlanetConfig.load(textureManager, hullConfigs, configFile, sh, cols, itemMan);
+      PlanetConfig c = PlanetConfig.load(textureManager, hullConfigs, configFile, sh, cols, itemManager);
       myAllConfigs.put(sh.name, c);
       if (c.hardOnly) myHard.add(c);
       else if (c.easyOnly) myEasy.add(c);

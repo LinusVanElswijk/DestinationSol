@@ -4,8 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.miloshpetrov.sol2.SolFiles;
 import com.miloshpetrov.sol2.TextureManager;
+import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.DmgType;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.game.sound.SolSound;
@@ -97,10 +97,10 @@ public class Armor implements SolItem {
       this.example = new Armor(this);
     }
 
-    public static void loadConfigs(ItemMan itemMan, SoundManager soundManager, TextureManager textureManager, SolItemTypes types)
+    public static void loadConfigs(ItemManager itemManager, SoundManager soundManager, TextureManager textureManager, SolItemTypes types)
     {
       JsonReader r = new JsonReader();
-      FileHandle configFile = SolFiles.readOnly(ItemMan.ITEM_CONFIGS_DIR + "armors.json");
+      FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("armors.json");
       JsonValue parsed = r.parse(configFile);
       for (JsonValue sh : parsed) {
         String displayName = sh.getString("displayName");
@@ -114,7 +114,7 @@ public class Armor implements SolItem {
         TextureAtlas.AtlasRegion icon = textureManager.getTex(TextureManager.ICONS_DIR + sh.getString("icon"), configFile);
         String code = sh.name;
         Config config = new Config(displayName, price, perc, bulletDmgSound, icon, energyDmgSound, types.armor, code);
-        itemMan.registerItem(config.example);
+        itemManager.registerItem(config.example);
       }
     }
   }

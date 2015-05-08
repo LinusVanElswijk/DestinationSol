@@ -4,8 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.miloshpetrov.sol2.SolFiles;
 import com.miloshpetrov.sol2.TextureManager;
+import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.projectile.ProjectileConfig;
 
 public class ClipConfig {
@@ -39,13 +39,13 @@ public class ClipConfig {
     this.example = new ClipItem(this);
   }
 
-  public static void load(ItemMan itemMan, TextureManager textureManager, SolItemTypes types) {
+  public static void load(ItemManager itemManager, TextureManager textureManager, SolItemTypes types) {
     JsonReader r = new JsonReader();
-    FileHandle configFile = SolFiles.readOnly(ItemMan.ITEM_CONFIGS_DIR + "clips.json");
+    FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("clips.json");
     JsonValue parsed = r.parse(configFile);
     for (JsonValue sh : parsed) {
       String projectileName = sh.getString("projectile");
-      ProjectileConfig projConfig = itemMan.projConfigs.find(projectileName);
+      ProjectileConfig projConfig = itemManager.projConfigs.find(projectileName);
       boolean infinite = sh.getBoolean("infinite", false);
       int size = sh.getInt("size");
       int projectilesPerShot = sh.getInt("projectilesPerShot", 1);
@@ -64,7 +64,7 @@ public class ClipConfig {
       }
       String code = sh.name;
       ClipConfig config = new ClipConfig(projConfig, infinite, price, displayName, size, plural, icon, projectilesPerShot, types.clip, code);
-      itemMan.registerItem(config.example);
+      itemManager.registerItem(config.example);
     }
   }
 }

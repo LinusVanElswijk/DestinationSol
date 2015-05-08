@@ -3,7 +3,7 @@ package com.miloshpetrov.sol2.game.screens;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.miloshpetrov.sol2.Const;
-import com.miloshpetrov.sol2.SolCmp;
+import com.miloshpetrov.sol2.SolApplication;
 import com.miloshpetrov.sol2.common.SolMath;
 import com.miloshpetrov.sol2.game.*;
 import com.miloshpetrov.sol2.game.input.AiPilot;
@@ -11,6 +11,7 @@ import com.miloshpetrov.sol2.game.input.Guardian;
 import com.miloshpetrov.sol2.game.item.*;
 import com.miloshpetrov.sol2.game.planet.Planet;
 import com.miloshpetrov.sol2.game.ship.*;
+import com.miloshpetrov.sol2.game.ship.hulls.HullConfig;
 import com.miloshpetrov.sol2.ui.*;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class HireShips implements InventoryOperations {
   }
 
   @Override
-  public void updateCustom(SolCmp cmp, SolInputManager.Ptr[] ptrs, boolean clickedOutside) {
+  public void updateCustom(SolApplication cmp, SolInputManager.Ptr[] ptrs, boolean clickedOutside) {
     SolGame game = cmp.getGame();
     InventoryScreen is = game.getScreens().inventoryScreen;
     SolShip hero = game.getHero();
@@ -88,7 +89,7 @@ public class HireShips implements InventoryOperations {
 
   private Vector2 getPos(SolGame game, SolShip hero, HullConfig hull) {
     Vector2 pos = new Vector2();
-    float dist = hero.getHull().config.approxRadius + Guardian.DIST + hull.approxRadius;
+    float dist = hero.getHull().config.getApproxRadius() + Guardian.DIST + hull.getApproxRadius();
     Vector2 heroPos = hero.getPos();
     Planet np = game.getPlanetMan().getNearestPlanet();
     boolean nearGround = np.isNearGround(heroPos);
@@ -114,27 +115,27 @@ public class HireShips implements InventoryOperations {
   }
 
   @Override
-  public void onAdd(SolCmp cmp) {
+  public void onAdd(SolApplication cmp) {
 
   }
 
   @Override
-  public void blurCustom(SolCmp cmp) {
+  public void blurCustom(SolApplication cmp) {
 
   }
 
   @Override
-  public void drawBg(UiDrawer uiDrawer, SolCmp cmp) {
+  public void drawBg(UiDrawer uiDrawer, SolApplication cmp) {
 
   }
 
   @Override
-  public void drawImgs(UiDrawer uiDrawer, SolCmp cmp) {
+  public void drawImgs(UiDrawer uiDrawer, SolApplication cmp) {
     cmp.getGame();
   }
 
   @Override
-  public void drawText(UiDrawer uiDrawer, SolCmp cmp) {
+  public void drawText(UiDrawer uiDrawer, SolApplication cmp) {
 
   }
 

@@ -7,8 +7,9 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.miloshpetrov.sol2.*;
 import com.miloshpetrov.sol2.common.SolMath;
+import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.DmgType;
-import com.miloshpetrov.sol2.game.GameCols;
+import com.miloshpetrov.sol2.game.GameColors;
 import com.miloshpetrov.sol2.game.particle.EffectConfig;
 import com.miloshpetrov.sol2.game.particle.EffectTypes;
 import com.miloshpetrov.sol2.game.sound.SolSound;
@@ -21,10 +22,10 @@ public class ProjectileConfigs {
 
   private final Map<String, ProjectileConfig> myConfigs;
 
-  public ProjectileConfigs(TextureManager textureManager, SoundManager soundManager, EffectTypes effectTypes, GameCols cols) {
+  public ProjectileConfigs(TextureManager textureManager, SoundManager soundManager, EffectTypes effectTypes, GameColors cols) {
     myConfigs = new HashMap<String, ProjectileConfig>();
     JsonReader r = new JsonReader();
-    FileHandle configFile = SolFiles.readOnly(Const.CONFIGS_DIR + "projectiles.json");
+    FileHandle configFile = FileManager.getInstance().getConfigDirectory().child("projectiles.json");
     JsonValue parsed = r.parse(configFile);
     for (JsonValue sh : parsed) {
       String texName = "smallGameObjs/projectiles/" + sh.getString("texName");

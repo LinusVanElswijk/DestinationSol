@@ -2,6 +2,7 @@ package com.miloshpetrov.sol2.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.miloshpetrov.sol2.*;
 import com.miloshpetrov.sol2.common.SolColor;
 import com.miloshpetrov.sol2.common.SolMath;
+import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.GameOptions;
 
@@ -56,7 +58,9 @@ public class SolInputManager {
     myToRemove = new ArrayList<SolUiScreen>();
     myToAdd = new ArrayList<SolUiScreen>();
     myWarnCol = new Color(SolColor.UI_WARN);
-    myHoverSound = Gdx.audio.newSound(SolFiles.readOnly("res/sounds/ui/uiHover.ogg"));
+
+    FileHandle hoverSoundFile = FileManager.getInstance().getSoundsDirectory().child("ui").child("uiHover.ogg");
+    myHoverSound = Gdx.audio.newSound(hoverSoundFile);
   }
 
   public void maybeFlashPressed(int keyCode) {
@@ -87,7 +91,7 @@ public class SolInputManager {
 
   }
 
-  public void setScreen(SolCmp cmp, SolUiScreen screen) {
+  public void setScreen(SolApplication cmp, SolUiScreen screen) {
     for (int i = 0, myScreensSize = myScreens.size(); i < myScreensSize; i++) {
       SolUiScreen oldScreen = myScreens.get(i);
       removeScreen(oldScreen, cmp);
@@ -95,12 +99,12 @@ public class SolInputManager {
     addScreen(cmp, screen);
   }
 
-  public void addScreen(SolCmp cmp, SolUiScreen screen) {
+  public void addScreen(SolApplication cmp, SolUiScreen screen) {
     myToAdd.add(screen);
     screen.onAdd(cmp);
   }
 
-  private void removeScreen(SolUiScreen screen, SolCmp cmp) {
+  private void removeScreen(SolUiScreen screen, SolApplication cmp) {
     myToRemove.add(screen);
     List<SolUiControl> controls = screen.getControls();
     for (int i = 0, controlsSize = controls.size(); i < controlsSize; i++) {
@@ -120,7 +124,7 @@ public class SolInputManager {
     ptr.y = 1f * screenY / h;
   }
 
-  public void update(SolCmp cmp) {
+  public void update(SolApplication cmp) {
     boolean mobile = cmp.isMobile();
     if (!mobile) maybeFixMousePos();
 
@@ -202,7 +206,7 @@ public class SolInputManager {
     myToAdd.clear();
   }
 
-  private void updateCursor(SolCmp cmp) {
+  private void updateCursor(SolApplication cmp) {
     if (cmp.isMobile()) return;
     myMousePos.set(myPtrs[0].x, myPtrs[0].y);
     if (cmp.getOptions().controlType != GameOptions.CONTROL_KB) {
@@ -246,7 +250,7 @@ public class SolInputManager {
     }
   }
 
-  public void draw(UiDrawer uiDrawer, SolCmp cmp) {
+  public void draw(UiDrawer uiDrawer, SolApplication cmp) {
     for (int i = myScreens.size() - 1; i >= 0; i--) {
       SolUiScreen screen = myScreens.get(i);
 
@@ -289,11 +293,11 @@ public class SolInputManager {
     return myMouseOnUi;
   }
 
-  public void playHover(SolCmp cmp) {
+  public void playHover(SolApplication cmp) {
     myHoverSound.play(.7f * cmp.getOptions().volMul, .7f, 0);
   }
 
-  public void playClick(SolCmp cmp) {
+  public void playClick(SolApplication cmp) {
     myHoverSound.play(.7f * cmp.getOptions().volMul, .9f, 0);
   }
 

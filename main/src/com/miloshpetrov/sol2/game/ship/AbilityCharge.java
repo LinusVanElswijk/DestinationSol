@@ -4,8 +4,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.miloshpetrov.sol2.SolFiles;
 import com.miloshpetrov.sol2.TextureManager;
+import com.miloshpetrov.sol2.files.FileManager;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.game.item.*;
 
@@ -75,9 +75,9 @@ public class AbilityCharge implements SolItem {
       this.code = code;
     }
 
-    public static void load(ItemMan itemMan, TextureManager textureManager, SolItemTypes types) {
+    public static void load(ItemManager itemManager, TextureManager textureManager, SolItemTypes types) {
       JsonReader r = new JsonReader();
-      FileHandle configFile = SolFiles.readOnly(ItemMan.ITEM_CONFIGS_DIR + "abilityCharges.json");
+      FileHandle configFile = FileManager.getInstance().getItemsDirectory().child("abilityCharges.json");
       JsonValue parsed = r.parse(configFile);
       for (JsonValue ammoNode : parsed) {
         String iconName = ammoNode.getString("iconName");
@@ -88,7 +88,7 @@ public class AbilityCharge implements SolItem {
         String code = ammoNode.name;
         Config c = new Config(icon, price, displayName, desc, types.abilityCharge, code);
         AbilityCharge chargeExample = new AbilityCharge(c);
-        itemMan.registerItem(chargeExample);
+        itemManager.registerItem(chargeExample);
       }
     }
   }

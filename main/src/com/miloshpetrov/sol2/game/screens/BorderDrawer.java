@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.miloshpetrov.sol2.Const;
-import com.miloshpetrov.sol2.SolCmp;
+import com.miloshpetrov.sol2.SolApplication;
 import com.miloshpetrov.sol2.common.SolColor;
 import com.miloshpetrov.sol2.common.SolMath;
 import com.miloshpetrov.sol2.game.*;
@@ -25,7 +25,7 @@ public class BorderDrawer {
   private final ArrayList<Tishch> myTishches;
   private final Vector2 myTmpVec = new Vector2();
 
-  public BorderDrawer(float r, SolCmp cmp) {
+  public BorderDrawer(float r, SolApplication cmp) {
     TextureAtlas.AtlasRegion tex = cmp.getTexMan().getTex("ui/tishch", null);
     int hCellCount = (int) (r / TISHCH_SZ);
     int vCellCount = (int) (1 / TISHCH_SZ);
@@ -52,7 +52,7 @@ public class BorderDrawer {
     }
   }
 
-  public void draw(UiDrawer drawer, SolCmp cmp) {
+  public void draw(UiDrawer drawer, SolApplication cmp) {
     SolGame g = cmp.getGame();
     SolCam cam = g.getCam();
     Vector2 camPos = cam.getPos();
@@ -69,9 +69,9 @@ public class BorderDrawer {
         SolShip ship = (SolShip) o;
         Vector2 shipPos = ship.getPos();
         Fraction shipFrac = ship.getPilot().getFraction();
-        float shipSize = ship.getHull().config.size;
+        float shipSize = ship.getHull().config.getSize();
         float shipAngle = ship.getAngle();
-        maybeDrawIcon(drawer, shipPos, cam, shipSize, shipAngle, mapDrawer, fracMan, hero, shipFrac, o, heroDmgCap, ship.getHull().config.icon);
+        maybeDrawIcon(drawer, shipPos, cam, shipSize, shipAngle, mapDrawer, fracMan, hero, shipFrac, o, heroDmgCap, ship.getHull().config.getIcon());
       }
       if ((o instanceof StarPort)) {
         StarPort sp = (StarPort) o;
@@ -84,9 +84,9 @@ public class BorderDrawer {
       FarShip ship = farShips.get(i);
       Vector2 shipPos = ship.getPos();
       Fraction shipFrac = ship.getPilot().getFraction();
-      float shipSize = ship.getHullConfig().size;
+      float shipSize = ship.getHullConfig().getSize();
       float shipAngle = ship.getAngle();
-      maybeDrawIcon(drawer, shipPos, cam, shipSize, shipAngle, mapDrawer, fracMan, hero, shipFrac, ship, heroDmgCap, ship.getHullConfig().icon);
+      maybeDrawIcon(drawer, shipPos, cam, shipSize, shipAngle, mapDrawer, fracMan, hero, shipFrac, ship, heroDmgCap, ship.getHullConfig().getIcon());
     }
     List<StarPort.MyFar> farPorts = g.getObjMan().getFarPorts();
     for (int i = 0, sz = farPorts.size(); i < sz; i++) {

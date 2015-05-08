@@ -2,11 +2,13 @@ package com.miloshpetrov.sol2.game.screens;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.miloshpetrov.sol2.SolCmp;
+import com.miloshpetrov.sol2.SolApplication;
 import com.miloshpetrov.sol2.game.SolGame;
 import com.miloshpetrov.sol2.game.gun.GunItem;
 import com.miloshpetrov.sol2.game.item.*;
 import com.miloshpetrov.sol2.game.ship.*;
+import com.miloshpetrov.sol2.game.ship.hulls.HullConfig;
+import com.miloshpetrov.sol2.game.ship.hulls.Hull;
 import com.miloshpetrov.sol2.ui.*;
 
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class ChangeShip implements InventoryOperations {
   }
 
   @Override
-  public void updateCustom(SolCmp cmp, SolInputManager.Ptr[] ptrs, boolean clickedOutside) {
+  public void updateCustom(SolApplication cmp, SolInputManager.Ptr[] ptrs, boolean clickedOutside) {
     SolGame game = cmp.getGame();
     InventoryScreen is = game.getScreens().inventoryScreen;
     SolShip hero = game.getHero();
@@ -73,12 +75,12 @@ public class ChangeShip implements InventoryOperations {
 
   private void changeShip(SolGame game, SolShip hero, ShipItem selected) {
     HullConfig newConfig = selected.getConfig();
-    ShipHull hull = hero.getHull();
-    EngineItem.Config ec = newConfig.engineConfig;
+    Hull hull = hero.getHull();
+    EngineItem.Config ec = newConfig.getEngineConfig();
     EngineItem ei = ec == null ? null : ec.example.copy();
     GunItem g2 = hull.getGun(true);
     SolShip newHero = game.getShipBuilder().build(game, hero.getPos(), new Vector2(), hero.getAngle(), 0, hero.getPilot(),
-      hero.getItemContainer(), newConfig, newConfig.maxLife, hull.getGun(false), g2, null,
+      hero.getItemContainer(), newConfig, newConfig.getMaxLife(), hull.getGun(false), g2, null,
       ei, new ShipRepairer(), hero.getMoney(), hero.getTradeContainer(), hero.getShield(), hero.getArmor());
     game.getObjMan().removeObjDelayed(hero);
     game.getObjMan().addObjDelayed(newHero);
@@ -90,27 +92,27 @@ public class ChangeShip implements InventoryOperations {
   }
 
   @Override
-  public void onAdd(SolCmp cmp) {
+  public void onAdd(SolApplication cmp) {
 
   }
 
   @Override
-  public void blurCustom(SolCmp cmp) {
+  public void blurCustom(SolApplication cmp) {
 
   }
 
   @Override
-  public void drawBg(UiDrawer uiDrawer, SolCmp cmp) {
+  public void drawBg(UiDrawer uiDrawer, SolApplication cmp) {
 
   }
 
   @Override
-  public void drawImgs(UiDrawer uiDrawer, SolCmp cmp) {
+  public void drawImgs(UiDrawer uiDrawer, SolApplication cmp) {
 
   }
 
   @Override
-  public void drawText(UiDrawer uiDrawer, SolCmp cmp) {
+  public void drawText(UiDrawer uiDrawer, SolApplication cmp) {
 
   }
 
